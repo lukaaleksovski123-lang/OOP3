@@ -1,0 +1,47 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+int lerp_int(int a, int b, double t) {
+    return int(round(a * (1.0 - t) + b * t));
+}
+
+int main(int argc, char** argv) {
+    const int width  = 800;
+    const int height = 600;
+    const int innerR = 128, innerG = 0, innerB = 128;
+    const int outerR = 255, outerG = 0, outerB = 0;
+
+    const string filename = "gradient.ppm";
+    ofstream fout(filename);
+    if (!fout) {
+        cerr << "Не можам да отворам " << filename << " за пишување\n";
+        return 1;
+    }
+
+    fout << "P3\n" << width << " " << height << "\n255\n";
+
+    const double cx = width / 2.0;
+    const double cy = height / 2.0;
+    const double maxDist = sqrt(cx*cx + cy*cy);
+
+    for (int y = 0; y < height; ++y) {
+        for (int x = 0; x < width; ++x) {
+            double dx = x - cx;
+            double dy = y - cy;
+            double dist = sqrt(dx*dx + dy*dy);
+            double t = dist / maxDist;
+            if (t > 1.0) t = 1.0;
+
+            int R = lerp_int(innerR, outerR, t);
+            int G = lerp_int(innerG, outerG, t);
+            int B = lerp_int(innerB, outerB, t);
+
+            fout << R << " " << G << " " << B << "  ";
+        }
+        fout << "\n";
+    }
+
+    fout.close();
+    cout << "Градиент слика е сочувана во \"" << filename << "\"\n";
+    return 0;
+}
