@@ -17,7 +17,7 @@ Color lerp_color(const Color& c1, const Color& c2, double t) {
     };
 }
 
-int main(int argc, char** argv) {
+int main() {
     const int width  = 800;
     const int height = 600;
 
