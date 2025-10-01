@@ -1,15 +1,28 @@
 #include <bits/stdc++.h>
 using namespace std;
 
+struct Color {
+    int R, G, B;
+};
+
 int lerp_int(int a, int b, double t) {
     return int(round(a * (1.0 - t) + b * t));
+}
+
+Color lerp_color(const Color& c1, const Color& c2, double t) {
+    return {
+        lerp_int(c1.R, c2.R, t),
+        lerp_int(c1.G, c2.G, t),
+        lerp_int(c1.B, c2.B, t)
+    };
 }
 
 int main(int argc, char** argv) {
     const int width  = 800;
     const int height = 600;
-    const int innerR = 128, innerG = 0, innerB = 128;
-    const int outerR = 255, outerG = 0, outerB = 0;
+
+    Color outer = {128, 0, 128};
+    Color inner = {255, 0, 0};
 
     const string filename = "gradient.ppm";
     ofstream fout(filename);
@@ -32,11 +45,8 @@ int main(int argc, char** argv) {
             double t = dist / maxDist;
             if (t > 1.0) t = 1.0;
 
-            int R = lerp_int(innerR, outerR, t);
-            int G = lerp_int(innerG, outerG, t);
-            int B = lerp_int(innerB, outerB, t);
-
-            fout << R << " " << G << " " << B << "  ";
+            Color pixel = lerp_color(inner, outer, t);
+            fout << pixel.R << " " << pixel.G << " " << pixel.B << "  ";
         }
         fout << "\n";
     }
