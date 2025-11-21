@@ -1,0 +1,103 @@
+#include<iostream>
+using namespace std;
+
+class Frac {
+    int n;
+    int d;
+    
+public:
+    int N () const { return this->n; }
+    int D () const { return this->d; }
+    
+    void setN(int x) { this->n = x; }
+    void setD(int x) { this->d = x; }
+
+    Frac(const int n, const int d=1) {
+        this->n = n;
+        this->d = d;
+    }
+
+    Frac (const Frac& orig) {
+        this->n = orig.n;
+        this->d = orig.d;
+    }
+
+    Frac& operator=(const Frac& orig) {
+        if (this!=&orig) { // No Self-assignment
+            this->n = orig.n;
+            this->d = orig.d;
+        }
+        return *this;
+    }
+
+    Frac operator*(const Frac& b) {
+        Frac t(*this);
+        t.setN(this->N() * b.N());
+        t.setD(this->D() * b.D());
+        return t;
+    }
+    
+    Frac operator/(const Frac& b) const{
+        Frac t(*this);
+        t.setN(this->N() * b.D());
+        t.setD(this->D() * b.N());
+        return t;
+    }
+    
+    Frac operator+(const Frac& b) const{
+        Frac t(*this);
+        t.setN(this->N() * b.D() + this->D() * b.N());
+        t.setD(this->D() * b.D());
+        return t;
+    }
+    
+    Frac operator-(const Frac& b) const{
+        Frac t(*this);
+        t.setN(this->N() * b.D() - this->D() * b.N());
+        t.setD(this->D() * b.D());
+        return t;
+    }
+    
+    bool operator==(const Frac& b) const{
+        return (this->N() == b.N() && this->D() == b.D());
+    }
+    
+    bool operator<(const Frac& b) const{
+        return (this->N() * b.D() < this->D() == b.N());
+    }
+    
+    bool operator>(const Frac& b) const{
+        return (this->N() * b.D() > this->D() == b.N());
+    }
+    
+    void print() {
+        cout<<this->n <<"/"<< this->d<<endl;
+    }
+
+    ~Frac() {}
+
+};
+
+
+int main() {
+    Frac a(1,2), b(3,4);
+
+    Frac c = a + b;
+    c.print();
+
+    Frac d = a - b;
+    d.print();
+
+    Frac e = a * b;
+    e.print();
+
+    Frac f = a / b;
+    f.print();
+    
+    if (a == b) cout << "a e isto kako b\n";
+    else cout<<"ne e ist\n";
+    
+    if (a < b) cout << "a < b\n";
+    if (b > a) cout << "b > a\n";
+
+}
