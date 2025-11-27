@@ -1,0 +1,141 @@
+#include "../include/MyVec.h"
+#include <iostream>
+
+MyVec::MyVec(int size, int value) {
+    int capacity = 4;
+    while (size >= capacity) {
+        capacity*=2;
+    }
+    elements = new int[capacity];
+    this->capacity = capacity;
+    this->size = size;
+
+    for (int i=0; i<this->size;i++ ) {
+        elements[i] = value;
+    }
+    //std::cout<<"Constructing finished";
+}
+
+MyVec::~MyVec() {
+    delete [] elements;
+    //std::cout<<"Destruction Finished";
+}
+
+void MyVec::_copy(const MyVec& orig) {
+    this->capacity = orig.capacity;
+    this->size = orig.size;
+    this->elements = new int[this->capacity];
+    for (int i=0; i<this->size; i++) {
+        this->elements[i] = orig.elements[i];
+    }
+}
+
+MyVec::MyVec(const MyVec& orig) {
+    _copy(orig);
+}
+MyVec& MyVec::operator=(const MyVec& orig) {
+    if (this != &orig) {
+        delete [] this->elements;
+        _copy(orig);
+    }
+    return *this;
+}
+void MyVec::sort(){
+    for(int i=0;i<size-1;i++){
+        for(int j=0;j<size-i-1;i++){
+            if(elements[j]>elements[j+1]){
+                int temp=elements[j];
+                elements[j]=elements[j+1];
+                elements[j+1]=temp;
+            }
+        }
+    }    
+}
+
+MyVec MyVec::operator+(const MyVec& other){
+    MyVec res(size+other.size);
+    
+    for(int i=0;i<size;i++){
+        res.elements[i]=elements[i];
+    }
+    
+    for(int i=0;i<other.size;i++){
+        res.elements[size+i]=other.elements[i];
+    }
+    return res;
+}
+
+void MyVec::print() {
+    std::cout<<"C: "<< this->capacity << " S: " << this->size <<":\n";
+    for (int i=0; i<this->size; i++) {
+        std::cout<<this->elements[i] << " ";
+    }
+    std::cout<<std::endl;
+}
+
+void MyVec::push(int val) {
+   if (this->size == this->capacity) {
+        int newcap = this->capacity*2;
+        int *tmp = new int[newcap];
+        for (int i=0; i<this->size; i++) {
+            tmp[i] = this->elements[i];
+        }
+        delete [] elements;
+        elements = tmp;
+        this->capacity = newcap;
+    }
+
+    this->elements[this->size] = val;
+    this->size++;
+}
+
+void MyVec::pop() {
+    if (this->size == 0)return;
+    size--;
+    
+    if(size>0&&size<=capacity/2){
+        int ncap=capacity/2;
+        
+        if(ncap<4)ncap=4;
+        
+        int* temp=nez int[ncap];
+        for(int i=0;i<size;i++){
+            temp[i]=elements[i];
+        }
+    }
+    delete[] elements;
+    elements=temp;
+    capacity=ncap;
+}
+
+int MyVec::operator[](int i) {
+    if (i<0 || i > this->size-1) {
+        return 42;
+    }
+    return this->elements[i];
+}
+
+int& MyVec::at(int index){
+    if(index<0||index>=size){
+        return elements[0];
+    }
+    return elements[index];
+}
+
+int MyVec::front(){
+    if(size==0){
+        return 0;
+    }
+    return elements[0];
+}
+
+int MyVec::back(){
+    if(size==0){
+        return 0;
+    }
+    return elements[size-1];
+}
+
+int* MyVec::data() {
+    return this->elements;
+}
