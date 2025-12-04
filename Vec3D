@@ -1,0 +1,145 @@
+#include <iostream>
+#include <cmath>
+using namespace std;
+
+class vec{
+    float x,y,z;
+    
+public:
+    vec(float x=0,float y=0,float z=0){
+        this->x=x;
+        this->y=y;
+        this->z=z;
+    }
+    vec(const vec& orig){
+        this->x=orig.x;
+        this->y=orig.y;
+        this->z=orig.z;
+    }
+    ~vec(){}
+    
+    
+    vec& operator=(const vec& o){
+        if(this!=&o){
+            this->x=o.x;
+            this->y=o.y;
+            this->z=o.z;
+        }
+        return *this;
+    }
+    vec operator+()const{
+        return *this;
+    }
+    vec operator-() const {
+    return vec(-x, -y, -z);
+    }
+    float operator~()const{
+        return sqrtf(x*x+y*y+z*z);
+    }
+    
+    
+    bool operator==(const vec &o)const{
+        return(this->x==o.x&&this->y==o.y&&this->z==o.z);
+    }
+    bool operator!=(const vec& o)const{
+        return !(*this==o);
+    }
+    bool operator<(const vec& o)const{
+        if(this->x!=o.x) return this->x<o.x;
+        if(this->y!=o.y) return this->y<o.y;
+        return this->z<o.z;
+    }
+    bool operator>(const vec& o)const{
+        return o<*this;
+    }
+    bool operator<=(const vec& o)const{
+        return !(*this>o);
+    }
+    bool operator>=(const vec& o)const{
+        return !(*this<o);
+    }
+    
+    
+    float operator[](const int i)const{
+        if(i==0)return this->x;
+        else if(i==1)return this->y;
+        else if(i==2)return this->z;
+        else return -1;
+    }
+    
+    vec operator*(float n)const{
+        return vec(this->x*n,this->y*n,this->z*n);
+    }
+    vec operator+(const vec& o)const{
+        return vec(x+o.x,y+o.y,z+o.z);
+    }
+    vec operator-(const vec& o)const{
+        return vec(x-o.x,y-o.y,z-o.z);
+    }
+    
+    
+    vec& operator++(){
+        x+=1; y+=1; z+=1;
+        return *this;
+    }
+    vec operator++(int){
+        vec t(*this);
+        x+=1; y+=1; z+=1;
+        return t;
+    }
+    vec& operator--(){
+        x-=1; y-=1; z-=1;
+        return *this;
+    }
+    vec operator--(int){
+        vec t(*this);
+        x-=1; y-=1; z-=1;
+        return t;
+    }
+    
+    
+    friend ostream& operator<<(ostream& o, const vec& v);
+    friend istream& operator>>(istream& o, vec& v);
+};
+
+
+ostream& operator<<(ostream& o,const vec& v){
+    o<<"("<<v.x<<","<<v.y<<","<<v.z<<")";
+    return o;
+}
+istream& operator>>(istream& o,vec& v){
+    o>>v.x>>v.y>>v.z;
+    return o;
+}
+
+
+int main()
+{
+    vec a(1, 2, 3);
+    vec b(4, 5, 6);
+
+    cout<<"a = "<< a <<"\n";
+    cout<<"b = "<< b <<"\n";
+
+    vec c = a + b;
+    cout<<"a + b = "<< c <<"\n";
+
+    vec d = b - a;
+    cout<<"b - a = "<< d <<"\n";
+
+    vec e = a * 2;
+    cout<<"a * 2 = "<< e <<"\n";
+
+    cout<<"Modul na a = "<< ~a <<"\n";
+
+    cout<<"a[0] = "<< a[0] <<", a[1] = "<< a[1] <<", a[2] = "<< a[2] <<"\n";
+
+    cout<<"Preinkrement ++a: "<< ++a <<"\n";
+    cout<<"Postinkrement a++: "<< a++ <<"\n";
+    cout<<"a posle a++ = "<< a <<"\n";
+
+    cout<<"Pogolem(a,b)? "<< (a > b) <<"\n";
+    cout<<"Pomalo(a,b)? "<< (a < b) <<"\n";
+
+    return 0;
+}
