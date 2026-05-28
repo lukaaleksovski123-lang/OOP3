@@ -68,7 +68,7 @@ public:
     bool LoadFromFile(const std::string& filename) {
         std::ifstream inFile(filename);
         if (!inFile.is_open()) {
-            Clear(); // Ако нема таков фајл, креирај нов празен документ
+            Clear();
             return false;
         }
 
